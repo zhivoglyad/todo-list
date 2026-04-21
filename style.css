@@ -1,0 +1,455 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-hover: rgba(255, 255, 255, 0.13);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.52);
+  --accent-gradient: linear-gradient(135deg, #7b2ff7, #f107a3);
+  --accent-hover: linear-gradient(135deg, #9244ff, #ff18b0);
+  --purple-glow: rgba(123, 47, 247, 0.55);
+  --pink-glow: rgba(241, 7, 163, 0.35);
+  --danger-glow: rgba(255, 60, 100, 0.35);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  padding: 2.5rem 1rem 4rem;
+}
+
+/* ─── Layout ─────────────────────────────────────────────── */
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ─── Header ─────────────────────────────────────────────── */
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 700;
+  color: #f0eaff;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 300;
+}
+
+/* ─── Glass utility ──────────────────────────────────────── */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+}
+
+/* ─── Input section ──────────────────────────────────────── */
+
+.input-section {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.input-section input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.input-section input::placeholder {
+  color: var(--text-muted);
+}
+
+.input-section input:focus-visible {
+  border-color: rgba(123, 47, 247, 0.65);
+  box-shadow: 0 0 0 3px rgba(123, 47, 247, 0.18);
+}
+
+/* ─── Screen-reader only ─────────────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─── Buttons ────────────────────────────────────────────── */
+
+.btn {
+  border: none;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition:
+    transform 0.15s,
+    box-shadow 0.2s;
+}
+
+.btn:active {
+  transform: scale(0.96) !important;
+}
+
+.btn-primary {
+  background: var(--accent-gradient);
+  color: var(--text-primary);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px var(--purple-glow);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 6px 28px rgba(123, 47, 247, 0.7);
+  transform: translateY(-1px);
+}
+
+.btn-primary:focus-visible,
+.filter-btn:focus-visible,
+.btn-icon:focus-visible,
+.custom-checkbox:focus-visible {
+  outline: 2px solid rgba(192, 132, 252, 0.9);
+  outline-offset: 2px;
+}
+
+/* ─── Filter buttons ──────────────────────────────────────── */
+
+.filters {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.filter-btn {
+  flex: 1;
+  padding: 0.6rem 0.5rem;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-secondary);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s,
+    transform 0.15s;
+}
+
+.filter-btn:hover {
+  background: var(--glass-hover);
+  color: var(--text-primary);
+}
+
+.filter-btn:active {
+  transform: scale(0.97);
+}
+
+.filter-btn.active {
+  background: var(--accent-gradient);
+  border-color: transparent;
+  color: var(--text-primary);
+  box-shadow: 0 4px 18px var(--pink-glow);
+}
+
+/* ─── Task list ──────────────────────────────────────────── */
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+/* ─── Task item ──────────────────────────────────────────── */
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+  transition:
+    background 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+  animation: slideIn 0.28s ease forwards;
+}
+
+.task-item:hover {
+  background: var(--glass-hover);
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Custom checkbox ────────────────────────────────────── */
+
+.custom-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
+}
+
+.custom-checkbox:hover {
+  border-color: rgba(123, 47, 247, 0.8);
+  box-shadow: 0 0 10px rgba(123, 47, 247, 0.35);
+}
+
+.custom-checkbox:checked {
+  background: var(--accent-gradient);
+  border-color: transparent;
+  box-shadow: 0 0 16px var(--purple-glow);
+}
+
+.custom-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 8px;
+  height: 12px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ─── Task text ──────────────────────────────────────────── */
+
+.task-text {
+  flex: 1;
+  font-size: 0.93rem;
+  color: var(--text-primary);
+  word-break: break-word;
+  line-height: 1.5;
+  transition:
+    color 0.3s,
+    text-decoration 0.3s;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* ─── Action icon buttons ────────────────────────────────── */
+
+.task-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.btn-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    box-shadow 0.2s,
+    transform 0.15s;
+}
+
+.btn-icon:hover {
+  transform: scale(1.1);
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
+}
+
+.btn-reminder:hover {
+  background: rgba(123, 47, 247, 0.25);
+  border-color: rgba(123, 47, 247, 0.5);
+  color: #c084fc;
+  box-shadow: 0 0 12px rgba(123, 47, 247, 0.35);
+}
+
+.btn-delete:hover {
+  background: rgba(255, 60, 100, 0.2);
+  border-color: rgba(255, 60, 100, 0.45);
+  color: #ff6b8a;
+  box-shadow: 0 0 12px var(--danger-glow);
+}
+
+/* ─── Empty state ────────────────────────────────────────── */
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ─── Loading skeleton ───────────────────────────────────── */
+
+.loading-text {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  body {
+    padding: 1.5rem 0.75rem 3rem;
+  }
+
+  .input-section {
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .btn-primary {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .filters {
+    gap: 0.4rem;
+  }
+
+  .filter-btn {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.3rem;
+  }
+
+  .task-item {
+    padding: 0.85rem 1rem;
+    gap: 0.65rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-item {
+    animation: none;
+  }
+
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}

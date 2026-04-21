@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>My Tasks</h1>
+        <p class="subtitle">Stay organized, stay focused</p>
+      </header>
+
+      <div class="input-section glass">
+        <label for="taskInput" class="sr-only">New task</label>
+        <input
+          type="text"
+          id="taskInput"
+          placeholder="Add a new task..."
+          autocomplete="off"
+          maxlength="200"
+        />
+        <button id="addBtn" class="btn btn-primary">Add</button>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All tasks</button>
+        <button class="filter-btn" data-filter="completed">Completed</button>
+        <button class="filter-btn" data-filter="pending">Pending</button>
+      </div>
+
+      <div id="taskList" class="task-list"></div>
+
+      <div id="emptyState" class="empty-state hidden">
+        <span class="empty-icon">✨</span>
+        <p id="emptyMessage">No tasks yet! Add your first one above.</p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
