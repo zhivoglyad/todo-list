@@ -20,6 +20,11 @@ async function init() {
   emptyStateEl = document.getElementById('emptyState');
   emptyMsgEl   = document.getElementById('emptyMessage');
 
+  // Show loading immediately — before any async work
+  if (!localStorage.getItem(STORAGE_KEY)) {
+    showLoadingState();
+  }
+
   await ensureNotificationPermission();
   await loadTasks();
   renderTasks();
@@ -59,8 +64,6 @@ async function loadTasks() {
     return;
   }
 
-  showLoadingState();
-
   try {
     const response = await fetch(`${API_URL}?_limit=15`);
     if (!response.ok) throw new Error(`API error: ${response.status}`);
@@ -91,6 +94,7 @@ function showLoadingState() {
   taskListEl.appendChild(loading);
 }
 
+// Full re-render — only for filter changes and initial load (no animation)
 function renderTasks() {
   const { predicate, emptyMsg } = FILTER_CONFIG[currentFilter];
   const filtered = tasks.filter(predicate);
@@ -107,10 +111,19 @@ function renderTasks() {
   filtered.forEach(task => taskListEl.appendChild(createTaskElement(task)));
 }
 
-function createTaskElement(task) {
+// Show empty state if list is now empty after a removal
+function checkEmptyState() {
+  if (taskListEl.children.length === 0) {
+    emptyMsgEl.textContent = FILTER_CONFIG[currentFilter].emptyMsg;
+    emptyStateEl.classList.remove('hidden');
+  }
+}
+
+function createTaskElement(task, isNew = false) {
   const item = document.createElement('div');
   item.classList.add('task-item', 'glass');
   if (task.completed) item.classList.add('completed');
+  if (isNew) item.classList.add('is-new');
   item.dataset.id = String(task.id);
 
   // Structure via innerHTML; user text is set via textContent below (XSS-safe)
@@ -124,18 +137,18 @@ function createTaskElement(task) {
   `;
 
   item.querySelector('.task-text').textContent = task.text;
+
+  // Clicking anywhere on the card toggles the task (except buttons and the checkbox itself)
+  item.addEventListener('click', (e) => {
+    if (e.target.closest('.task-actions') || e.target.classList.contains('custom-checkbox')) return;
+    toggleTask(task.id);
+  });
+
   item.querySelector('.custom-checkbox').addEventListener('change', () => toggleTask(task.id));
   item.querySelector('.btn-reminder').addEventListener('click', () => setReminder(task.id, task.text));
   item.querySelector('.btn-delete').addEventListener('click', () => deleteTask(task.id));
 
   return item;
-}
-
-// ─── Commit helper ─────────────────────────────────────────
-
-function commitTasks() {
-  saveTasks();
-  renderTasks();
 }
 
 // ─── Task actions ──────────────────────────────────────────
@@ -145,9 +158,19 @@ function addTask() {
   const text = input.value.trim();
   if (!text) return;
 
-  tasks.unshift({ id: Date.now(), text, completed: false });
+  const newTask = { id: Date.now(), text, completed: false };
+  tasks.unshift(newTask);
+  saveTasks();
   input.value = '';
-  commitTasks();
+
+  // New tasks are always pending — switch to 'all' if current filter would hide them
+  if (!FILTER_CONFIG[currentFilter].predicate(newTask)) {
+    setFilter('all');
+    return;
+  }
+
+  emptyStateEl.classList.add('hidden');
+  taskListEl.prepend(createTaskElement(newTask, true));
 }
 
 function toggleTask(id) {
@@ -155,7 +178,20 @@ function toggleTask(id) {
   if (!task) return;
 
   task.completed = !task.completed;
-  commitTasks();
+  saveTasks();
+
+  const item = taskListEl.querySelector(`[data-id="${id}"]`);
+  if (!item) return;
+
+  if (FILTER_CONFIG[currentFilter].predicate(task)) {
+    // Still matches filter — update in place, no re-render, no flicker
+    item.classList.toggle('completed', task.completed);
+    item.querySelector('.custom-checkbox').checked = task.completed;
+  } else {
+    // No longer matches active filter — remove from view
+    item.remove();
+    checkEmptyState();
+  }
 }
 
 function deleteTask(id) {
@@ -163,7 +199,10 @@ function deleteTask(id) {
   reminderTimers.delete(id);
 
   tasks = tasks.filter(t => t.id !== id);
-  commitTasks();
+  saveTasks();
+
+  taskListEl.querySelector(`[data-id="${id}"]`)?.remove();
+  checkEmptyState();
 }
 
 // ─── Reminder ──────────────────────────────────────────────
