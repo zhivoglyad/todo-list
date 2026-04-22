@@ -223,6 +223,11 @@ header h1 {
     background 0.2s,
     transform 0.2s,
     box-shadow 0.2s;
+  cursor: pointer;
+  user-select: none;
+}
+
+.task-item.is-new {
   animation: slideIn 0.28s ease forwards;
 }
 
@@ -445,7 +450,7 @@ header h1 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .task-item {
+  .task-item.is-new {
     animation: none;
   }
 
